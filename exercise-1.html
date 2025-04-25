@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Game</title>
+    <script src="https://unpkg.com/vue@3.4.0"></script>
+  </head>
+  <body id="app">
+    <div>
+      <span>{{ displayedQuestion }}</span>
+      <input type="text" v-model="answer" />
+    </div>
+
+    <script>
+      const { createApp, ref, computed } = Vue;
+      const App = {
+        setup() {
+          const questionsAndAnswers = [
+            {
+              question: 'Question 1: how much is 4+9?',
+              answer: '13',
+            },
+            {
+              question: 'Question 2: how much is 5*3+4?',
+              answer: '19',
+            },
+            {
+              question: 'Question 3: What is the rest from 8 / 2?',
+              answer: '0',
+            },
+          ];
+          let currentQuestionIndex = ref(0);
+          let answer = ref(null);
+          let score = ref(0);
+          const displayedQuestion = computed(() => {
+            if (currentQuestionIndex.value >= questionsAndAnswers.length) {
+              return 'Your score is: ' + score.value;
+            }
+            return questionsAndAnswers[currentQuestionIndex.value].question;
+          });
+
+          const getAnswer = () => {
+            if (
+              answer.value ===
+              questionsAndAnswers[currentQuestionIndex.value].answer
+            ) {
+              score.value++;
+            }
+            answer.value = null;
+            if (currentQuestionIndex.value === questionsAndAnswers.length - 1) {
+              clearInterval(intervalId);
+            }
+            currentQuestionIndex.value++;
+          };
+          const intervalId = setInterval(getAnswer, 2000);
+
+          return {
+            score,
+            answer,
+            currentQuestionIndex,
+            displayedQuestion
+          };
+        },
+      };
+
+      createApp(App).mount('#app');
+    </script>
+  </body>
+</html>
