@@ -68,7 +68,7 @@
     </form>
 
     <!-- Task filtering -->
-    <input placeholder="Filter tasks...">
+    <input placeholder="Filter tasks..." v-model="filterTask">
 
     <!-- If there no tasks -->
     <div v-if="!tasks.length">
@@ -79,7 +79,7 @@
       <h3>Your Tasks</h3>
       <!-- This is a list of tasks -->
        
-      <div v-for="task in tasks" :key="task.id" :class="{task: true, completed: task.done, [task.priority.toLowerCase()]: true}">
+      <div v-for="(task, index) in filteredTasks" :key="task.id" :class="{task: true, completed: task.done, [task.priority.toLowerCase()]: true}">
         <div>
           <!-- Is task done? -->
           <input type="checkbox" v-model="task.done">
@@ -87,27 +87,23 @@
           <span>{{ task.description }}</span>
         </div>
         <!-- Removing a task -->
-        <button class="remove-button">✖</button>
+        <button class="remove-button" @click="removeTask(index)">✖</button>
       </div>
     </div>
   </div>
 
   <script>
-    const { createApp, onMounted, ref } = Vue;
+    const { createApp, onMounted, ref, watch , computed} = Vue;
 
     const App = {
       setup() {
-        const tasks = ref([
-          {
-            id: 1,
-            description: 'Buy groceries',
-            priority: 'High',
-            done: false
-          }
-        ])
+        const tasks = ref(
+          JSON.parse(localStorage.getItem('tasks')) || []
+        )
         const newTaskInput = ref(null)
         const newTask = ref('')
         const newTaskPriority = ref('')
+        const filterTask = ref('')
 
         const addTask = () => {
           if (newTask.value && newTaskPriority.value) {
@@ -122,17 +118,35 @@
             newTaskInput.value.focus();
           }
         }
+        const removeTask = (taskIndex) => {
+            tasks.value = tasks.value.filter((t, index) => index !== taskIndex);
+            localStorage.setItem('tasks', JSON.stringify(tasks.value));
+        }
+
+        const filteredTasks = computed(() => {
+          return tasks.value.filter(task => {
+            return task.description.toLowerCase().includes(filterTask.value.toLowerCase());
+          });
+        });
 
         onMounted(() => {
           console.log('mounted')
           newTaskInput.value.focus()
         });
+
+        watch(tasks, () => {
+          localStorage.setItem('tasks', JSON.stringify(tasks.value));
+        }, { deep: true });
+
         return {
           newTaskInput,
           tasks,
           newTask,
           newTaskPriority,
           addTask,
+          removeTask,
+          filteredTasks,
+          filterTask
         }
       },
     };
