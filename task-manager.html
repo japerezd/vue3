@@ -55,10 +55,10 @@
 
 <body>
   <div id="app">
-    <form>
+    <form @submit.prevent="addTask">
       <!-- Adding tasks form -->
-      <input ref="newTaskInput" placeholder="Add new task">
-      <select>
+      <input ref="newTaskInput" placeholder="Add new task" v-model="newTask">
+      <select v-model="newTaskPriority">
         <option disabled value="">Select priority</option>
         <option>High</option>
         <option>Medium</option>
@@ -106,6 +106,23 @@
           }
         ])
         const newTaskInput = ref(null)
+        const newTask = ref('')
+        const newTaskPriority = ref('')
+
+        const addTask = () => {
+          if (newTask.value && newTaskPriority.value) {
+            tasks.value.push({
+              id: tasks.value.length + 1,
+              description: newTask.value,
+              priority: newTaskPriority.value,
+              done: false
+            });
+            newTask.value = '';
+            newTaskPriority.value = '';
+            newTaskInput.value.focus();
+          }
+        }
+
         onMounted(() => {
           console.log('mounted')
           newTaskInput.value.focus()
@@ -113,6 +130,9 @@
         return {
           newTaskInput,
           tasks,
+          newTask,
+          newTaskPriority,
+          addTask,
         }
       },
     };
