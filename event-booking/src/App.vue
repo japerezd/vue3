@@ -7,18 +7,22 @@
     <section class="grid grid-cols-2 gap-8">
       <template v-if="!eventsAreLoading">
         <EventCard v-for="event in events" :key="event.id" :title="event.title" :when="event.date"
-        :description="event.description" @register="console.log('Registered!')" />
+        :description="event.description" @register="handleRegistration(event)" />
       </template>
       <template v-else>
         <LoadingEventCard v-for="i in 4" :key="i" />
       </template>
     </section>
+
     <h2 class="text-2xl font-medium">Your Bookings</h2>
 
     <section class="grid grid-cols-1 gap-4">
-      <BookingItem description="Vue Conference 2025" />
-      <BookingItem description="React Conference 2025" />
-      <BookingItem description="Svelte Conference 2025" />
+      <template v-if="!bookingsAreLoading">
+        <BookingItem v-for="booking in bookings" :key="booking.id" :description="booking.eventTitle" />
+      </template>
+      <template v-else>
+        <LoadingBookingItem v-for="i in 4" :key="i" />  
+      </template>
     </section>
   </main>
 </template>
@@ -29,9 +33,13 @@ import { onMounted, ref } from 'vue';
 import EventCard from '@/components/EventCard.vue';
 import BookingItem from '@/components/BookingItem.vue';
 import LoadingEventCard from './components/LoadingEventCard.vue';
+import LoadingBookingItem from './components/LoadingBookingItem.vue';
 
 const events = ref([]);
 const eventsAreLoading = ref(false);
+
+const bookings = ref([]);
+const bookingsAreLoading = ref(false);
 
 const fetchEvents = async () => {
   eventsAreLoading.value = true;
@@ -43,5 +51,40 @@ const fetchEvents = async () => {
   }
 }
 
-onMounted(() => fetchEvents());
+const fetchBookings = async () => {
+  try {
+    bookingsAreLoading.value = true;
+    const response = await fetch('http://localhost:3001/bookings');
+    bookings.value = await response.json();
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+  } finally {
+    bookingsAreLoading.value = false;
+  }
+}
+
+const handleRegistration = async (event) => {
+  const newBooking = {
+    id: Date.now().toString(),
+    userId: 1,
+    eventId: event.id,
+    eventTitle: event.title
+  };
+
+  await fetch('http://localhost:3001/bookings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      ...newBooking,
+      status: 'confirmed'
+    })
+  });
+}
+
+onMounted(() =>{
+  fetchEvents();
+  fetchBookings();
+});
 </script>
