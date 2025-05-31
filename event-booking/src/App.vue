@@ -26,7 +26,7 @@
 import { onMounted, ref } from 'vue';
 import EventList from '@/components/EventList.vue';
 import BookingItem from '@/components/BookingItem.vue';
-import LoadingBookingItem from './components/LoadingBookingItem.vue';
+import LoadingBookingItem from '@/components/LoadingBookingItem.vue';
 
 const bookings = ref([]);
 const bookingsAreLoading = ref(false);
@@ -104,7 +104,6 @@ const cancelBooking = async (bookingId) => {
 }
 
 onMounted(() => {
-  fetchEvents();
   fetchBookings();
 });
 </script>
