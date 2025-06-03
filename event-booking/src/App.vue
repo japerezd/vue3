@@ -10,7 +10,7 @@
     <h2 class="text-2xl font-medium">Your Bookings</h2>
 
     <section class="grid grid-cols-1 gap-4">
-      <template v-if="!bookingsAreLoading">
+      <template v-if="!isLoading">
         <BookingItem v-for="booking in bookings" :key="booking.id" :description="booking.eventTitle"
           :status="booking.status" @cancelled="cancelBooking(booking.id)" />
       </template>
@@ -23,25 +23,13 @@
 
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import EventList from '@/components/EventList.vue';
 import BookingItem from '@/components/BookingItem.vue';
 import LoadingBookingItem from '@/components/LoadingBookingItem.vue';
+import useBookings from './composables/useBookings';
 
-const bookings = ref([]);
-const bookingsAreLoading = ref(false);
-
-const fetchBookings = async () => {
-  try {
-    bookingsAreLoading.value = true;
-    const response = await fetch('http://localhost:3001/bookings');
-    bookings.value = await response.json();
-  } catch (error) {
-    console.error('Error fetching bookings:', error);
-  } finally {
-    bookingsAreLoading.value = false;
-  }
-}
+const { bookings, isLoading, fetchBookings } = useBookings();
 
 const findBookingById = (id) => bookings.value.findIndex(booking => booking.id === id);
 
