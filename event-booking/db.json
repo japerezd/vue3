@@ -31,10 +31,24 @@
   ],
   "bookings": [
     {
-      "id": "1748980986621",
+      "id": "1748981753171",
       "userId": 1,
       "eventId": "1",
       "eventTitle": "Rails Conference 2024",
+      "status": "confirmed"
+    },
+    {
+      "id": "1748981756242",
+      "userId": 1,
+      "eventId": "3",
+      "eventTitle": "PHP Conference 2022",
+      "status": "confirmed"
+    },
+    {
+      "id": "1748982091442",
+      "userId": 1,
+      "eventId": "2",
+      "eventTitle": "Vue Conference 2023",
       "status": "confirmed"
     }
   ]
