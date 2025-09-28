@@ -35,6 +35,13 @@ export const useRecipeStore = defineStore('recipe', () => {
 
     return recipeEdited;
   }
+  
+  const editRecipe2 = (updatedRecipe: Recipe) => {
+    const index = recipes.value.findIndex((recipe) => recipe.id === updatedRecipe.id)
+    if (index !== -1) {
+      recipes.value[index] = updatedRecipe;
+    }
+  }
 
 
   return {
@@ -42,6 +49,7 @@ export const useRecipeStore = defineStore('recipe', () => {
     addRecipe,
     getRecipeById,
     filteredRecipes,
-    editRecipe
+    editRecipe,
+    editRecipe2
   }
 })
