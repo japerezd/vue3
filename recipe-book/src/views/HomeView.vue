@@ -21,6 +21,9 @@
 </template>
 
 <script setup lang="ts">
+import { useRecipeStore } from '@/stores/recipe';
 import { RouterLink } from 'vue-router';
 
+const recipeStore = useRecipeStore();
+console.log(recipeStore.$state.recipes)
 </script>
