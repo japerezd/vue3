@@ -12,6 +12,13 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      // Now the user can go to / or /home and both will serve the same component
+      // alias: '/home' 
+    },
+    {
+      // If user goes to /home it will redirect to / and it will serve HomeView component
+        path: '/home',
+        redirect: '/'
     },
     {
       path: '/favorites',
