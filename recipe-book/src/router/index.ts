@@ -32,6 +32,11 @@ const router = createRouter({
     },
     {
       path: '/recipe/:id',
+      name: 'edit-recipe',
+      component: AddRecipeView
+    },
+    {
+      path: '/recipe/:id',
       name: 'recipe',
       component: RecipeView
     },

@@ -24,10 +24,24 @@ export const useRecipeStore = defineStore('recipe', () => {
 
   const filteredRecipes = (searchQuery: string) => recipes.value.filter((r) => r.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
+  const editRecipe = (id: string, recipeToEdit: NewRecipe) => {
+    const recipeEdited = {
+      name: recipeToEdit?.name ?? '',
+      description: recipeToEdit?.description ?? '',
+      id,
+    }
+    const recipeIndex = recipes.value.findIndex((r) => r.id === id)
+    recipes.value[recipeIndex] = recipeEdited
+
+    return recipeEdited;
+  }
+
+
   return {
     recipes,
     addRecipe,
     getRecipeById,
-    filteredRecipes
+    filteredRecipes,
+    editRecipe
   }
 })
