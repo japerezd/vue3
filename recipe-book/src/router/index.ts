@@ -29,7 +29,7 @@ const router = createRouter({
       component: RecipeView
     },
     {
-      path: '/:pathMatch(.*)',
+      path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundView
     }
