@@ -15,7 +15,7 @@ import { RouterView } from 'vue-router';
         <li>
           <RouterLink :to="{ name: 'add-recipe' }">Add Recipe</RouterLink>
         </li>
-      </ul>
+        </ul>
     </nav>
   </header>
 
