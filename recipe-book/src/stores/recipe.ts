@@ -11,6 +11,18 @@ type NewRecipe = Omit<Recipe, 'id'>
 
 export const useRecipeStore = defineStore('recipe', () => {
   const recipes = ref<Recipe[]>([])
+  const favorites = ref<string[]>([])
+
+  const toggleFavorite = (id: string) => {
+    if (favorites.value.includes(id)) {
+      favorites.value = favorites.value.filter((favId) => favId !== id)
+    } else {
+      favorites.value.push(id)
+    }
+  }
+
+  const isFavorite = (id: string) => favorites.value.includes(id)
+
   const addRecipe = (recipe: NewRecipe) => {
     const newRecipe = {
       id: Date.now().toString(),
@@ -50,6 +62,9 @@ export const useRecipeStore = defineStore('recipe', () => {
     getRecipeById,
     filteredRecipes,
     editRecipe,
-    editRecipe2
+    editRecipe2,
+    favorites,
+    toggleFavorite,
+    isFavorite
   }
 })
