@@ -1,14 +1,14 @@
 <template>
   <nav v-if="recipes.length">
     <ul>
-      <li v-for="recipe in recipes" :key="recipe.id">
-        <RouterLink :to="{ name: 'recipe', params: { id: recipe.id } }">
+      <li v-for="recipe in recipes" :key="recipe.id" class="mb-2">
+        <RouterLink :to="{ name: 'recipe', params: { id: recipe.id } }" class="text-amber-600 hover:underline">
           {{ recipe.name }}
         </RouterLink>
       </li>
     </ul>
   </nav>
-  <div v-else>No recipes found</div>
+  <div v-else class="text-gray-500">No recipes found</div>
 </template>
 
 <script setup lang="ts">
