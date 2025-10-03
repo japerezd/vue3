@@ -1,18 +1,8 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import Draggable from 'vuedraggable'
-
-interface Card {
-  id: number
-  title: string
-  description: string
-}
-
-interface List {
-  id: number
-  title: string
-  cards: Card[]
-}
+import ModalDialog from './components/ModalDialog.vue'
+import type { List } from './types'
 
 const lists = reactive<List[]>([
   {
@@ -67,5 +57,7 @@ const lists = reactive<List[]>([
         </button>
       </div>
     </div>
+  
+    <ModalDialog />
   </main>
 </template>
