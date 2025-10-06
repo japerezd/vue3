@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { watch, ref } from 'vue';
+import { watch, ref, nextTick } from 'vue';
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 
 const props = defineProps<{
   isOpen: boolean
@@ -11,11 +12,18 @@ defineEmits<{
 
 const titleInput = ref<HTMLInputElement | null>(null);
 
-watch(() => props.isOpen, () => {
+watch(() => props.isOpen, async () => {
   if (props.isOpen) {
-    setTimeout(() => titleInput.value?.focus(), 0)
+    await nextTick()
+    titleInput.value?.focus()
+    activate()
+  } else {
+    deactivate()
   }
 })
+
+const modalElement = ref<HTMLDivElement | null>(null)
+const { activate, deactivate } = useFocusTrap(modalElement)
 </script>
 
 <template>
@@ -25,6 +33,8 @@ watch(() => props.isOpen, () => {
     role="dialog"
     aria-modal="true"
     @keydown.esc="$emit('close')"
+    ref="modalElement"
+    @click="$emit('close')"
   >
     <div class="bg-white p-5 rounded max-w-md w-full">
       <h2 class="text-xl font-bold mb-4">Add New Card</h2>
